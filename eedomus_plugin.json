@@ -1,0 +1,432 @@
+{
+	"plugin_id": "bbmilight4",
+	"name_fr": "Milight v4",
+	"icon": "milight.png",
+	"version": "0.0.1",
+	"creation_date": "2020-01-07",
+	"modification_date": "2020-01-07",
+	"author": "Benjamin B.<br><a target='_blank' href='https://github.com/2bprog/eedomus-milight-plugin'>Sources sur github <img src='/img/external.png'></a>",
+	"description_fr": "Création d'un périphérique pour piloter les ampoules Mi-light avec un bridge v4",
+	"description_en": "",
+	"description_es": "",
+	"description_it": "",
+	"description_de": "",
+	"forum_link": "",
+	"parameters": [
+		{		
+			"parameter": "MIIP",
+			"description": "IP + Port (8899)",
+			"xtype": "textfield",
+			"default_value": "10.66.253.200:8899",
+			"field": "style: 'padding: 3px;', width:130, allowBlank:false, maskRe:/[0-9.:]/, regex:/^(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])\\:([0-9]{2}[0-9]?[0-9]?)$/, regexText:'Adresse IP invalide [0-255].[0-255].[0-255]:[0-255]'"
+		},
+		{
+			"parameter": "MIMODEL",
+			"description": "Modèle",
+			"xtype": "combo",
+			"default_value": "1",
+			"field": "style: 'padding: 3px;', width:200, allowBlank:false, store:[[1, 'Ampoule Blanche'] ,[2, 'Ampoule RGBW']], triggerAction: 'all'"
+		},
+		{
+			"parameter": "MIGROUP",
+			"description": "Groupe",
+			"xtype": "combo",
+			"default_value": "1",
+			"field": "style: 'padding: 3px;', width:200, allowBlank:false, store:[[0, 'Tous les groupes'] , [1,'Groupe 1'], [2, 'Groupe 2'], [3, ' Groupe 3'], [4, ' Groupe 4']], triggerAction: 'all'"
+		}
+	],
+	"scripts": [
+		{
+			"name": "2B_milight.php"
+		}
+	],
+	"devices": [
+		{	"device_id": "milamptt",		"create": "plugin.parameters.MIMODEL==1",
+			"module_id": "41",
+			"type": "http",
+			"name_fr": "plugin.name WS",
+			"icon": "lamp_on.png","icon2b":"Light01_LWC.png",
+			"utilisation_id": "1",
+			"parameters": {
+				"VAR1": "plugin.parameters.MIIP,plugin.parameters.MIGROUP,white",
+				"VAR2": "",
+				"VAR3": "",
+				"value_type": "list",
+				"ignore_errors": 3,
+				"RAW_URL": "",
+				"RAW_XPATH": "",
+				"POLLING": "",
+				"CONVERT": "0"
+			},
+			"values": [
+				{
+					"value": "-1",
+					"description": "On",
+					"icon": "lamp_on.png","icon2b":"Light01_On.png", 
+					"http_url": "http://localhost/script/?exec=2B_milight.php&vars=[VAR1]&cmd=on",
+					"http_type": "GET",
+					"hidden": "0"
+				},
+				{
+					"value": "0",
+					"description": "Off",
+					"icon": "lamp_off.png","icon2b":"Light01_Off.png", 
+					"http_url": "http://localhost/script/?exec=2B_milight.php&vars=[VAR1]&cmd=off",
+					"http_type": "GET",
+					"hidden": "0"
+				},
+				{
+					"value": "1",
+					"description": "Mode nuit",
+					"icon": "lamp_mid.png","icon2b":"Light01_Min.png", 
+					"http_url": "http://localhost/script/?exec=2B_milight.php&vars=[VAR1]&cmd=tonight",
+					"http_type": "GET",
+					"hidden": "0"
+				},
+				{
+					"value": "2",
+					"description": "Min",
+					"icon": "lamp_mid.png","icon2b":"Light01_Min.png", 
+					"http_url": "http://localhost/script/?exec=2B_milight.php&vars=[VAR1]&cmd=brimin",
+					"http_type": "GET",
+					"hidden": "0"
+				},
+				{
+					"value": "9",
+					"description": "Baisser la luminosité",
+					"icon": "lamp_mid.png","icon2b":"Light01_010.png", 
+					"http_url": "http://localhost/script/?exec=2B_milight.php&vars=[VAR1]&cmd=bridown",
+					"http_type": "GET",
+					"hidden": "0"
+				},
+				{
+					"value": "99",
+					"description": "Augmenter la luminosité",
+					"icon": "lamp_mid.png","icon2b":"Light01_090.png",
+					"http_url": "http://localhost/script/?exec=2B_milight.php&vars=[VAR1]&cmd=briup",
+					"http_type": "GET",
+					"hidden": "0"
+				},
+				{
+					"value": "100",
+					"description": "Max",
+					"icon": "lamp_on.png","icon2b":"Light01_Max.png",
+					"http_url": "http://localhost/script/?exec=2B_milight.php&vars=[VAR1]&cmd=brimax",
+					"http_type": "GET",
+					"hidden": "0"
+				}
+			]
+		},
+		{	"device_id": "milampttm",		"create": "plugin.parameters.MIMODEL==1",		"parent_id": "milamptt",
+			"module_id": "41",
+			"type": "http",
+			"name_fr": "plugin.name WS - Blancs",
+			"icon": "lamp_warm.png","icon2b":"Light01_LWC.png",
+			"utilisation_id": "43",
+			"parameters": {
+				"VAR1": "plugin.parameters.MIIP,plugin.parameters.MIGROUP,white",
+				"VAR2": "plugin.devices.milampttm",
+				"VAR3": "",
+				"value_type": "list",
+				"ignore_errors": 3,
+				"RAW_URL": "",
+				"RAW_XPATH": "",
+				"POLLING": "",
+				"CONVERT": "0"
+			},
+			"values": [
+				{
+					"value": "coolinc",
+					"description": "Plus froid",
+					"icon": "lamp_cold.png","icon2b":"Light01_TempW1.png",
+					"http_url": "http://localhost/script/?exec=2B_milight.php&vars=[VAR1]&cmd=[RAW_VALUE]",
+					"http_type": "GET",
+					"hidden": "0"
+				},
+				{
+					"value": "warminc",
+					"description": "Plus chaud",
+					"icon": "lamp_warm.png","icon2b":"Light01_TempW3.png",
+					"http_url": "http://localhost/script/?exec=2B_milight.php&vars=[VAR1]&cmd=[RAW_VALUE]",
+					"http_type": "GET",
+					"hidden": "0"
+				}
+			]
+		},
+		{	"device_id": "milamprgb",		"create": "plugin.parameters.MIMODEL==2",
+			"module_id": "41",
+			"type": "http",
+			"name_fr": "plugin.name RGB",
+			"icon": "lamp_on.png","icon2b":"Light01_LRGB.png",
+			"utilisation_id": "1",
+			"parameters": {
+				"VAR1": "plugin.parameters.MIIP,plugin.parameters.MIGROUP,rgbw",
+				"VAR2": "",
+				"VAR3": "",
+				"value_type": "list",
+				"ignore_errors": 3,
+				"RAW_URL": "",
+				"RAW_XPATH": "",
+				"POLLING": "",
+				"CONVERT": "0"
+			},
+			"values": [
+				{
+					"value": "-1",
+					"description": "On",
+					"icon": "lamp_on.png","icon2b":"Light01_On.png", 
+					"http_url": "http://localhost/script/?exec=2B_milight.php&vars=[VAR1]&cmd=on",					
+					"http_type": "GET",
+					"hidden": "0"
+				},
+				{
+					"value": "0",
+					"description": "Off",
+					"icon": "lamp_off.png","icon2b":"Light01_Off.png", 					
+					"http_url": "http://localhost/script/?exec=2B_milight.php&vars=[VAR1]&cmd=off",					
+					"http_type": "GET",
+					"hidden": "0"
+				},
+				{
+					"value": "1",
+					"description": "Mode nuit",
+					"icon": "lamp_mid.png","icon2b":"Light01_Min.png", 
+					"http_url": "http://localhost/script/?exec=2B_milight.php&vars=[VAR1]&cmd=tonight",					
+					"http_type": "GET",
+					"hidden": "0"
+				},
+				{
+					"value": "1",
+					"description": "Min",
+					"icon": "lamp_mid.png","icon2b":"Light01_Min.png", 
+					"http_url": "http://localhost/script/?exec=2B_milight.php&vars=[VAR1]&cmd=brimin",					
+					"http_type": "GET",
+					"hidden": "0"
+				},
+				{
+					"value": "10",
+					"description": "10%",
+					"icon": "lamp_mid.png","icon2b":"Light01_010.png", 
+					"http_url": "http://localhost/script/?exec=2B_milight.php&vars=[VAR1]&cmd=bri&bri=[RAW_VALUE]",					
+					"http_type": "GET",
+					"hidden": "0"
+				},
+				{
+					"value": "20",
+					"description": "20%",
+					"icon": "lamp_mid.png","icon2b":"Light01_020.png",
+					"http_url": "http://localhost/script/?exec=2B_milight.php&vars=[VAR1]&cmd=bri&bri=[RAW_VALUE]",					
+					"http_type": "GET",
+					"hidden": "0"
+				},
+				{
+					"value": "30",
+					"description": "30%",
+					"icon": "lamp_mid.png","icon2b":"Light01_030.png",
+					"http_url": "http://localhost/script/?exec=2B_milight.php&vars=[VAR1]&cmd=bri&bri=[RAW_VALUE]",					
+					"http_type": "GET",
+					"hidden": "0"
+				},
+				{
+					"value": "40",
+					"description": "40%",
+					"icon": "lamp_mid.png","icon2b":"Light01_040.png",
+					"http_url": "http://localhost/script/?exec=2B_milight.php&vars=[VAR1]&cmd=bri&bri=[RAW_VALUE]",					
+					"http_type": "GET",
+					"hidden": "0"
+				},
+				{
+					"value": "50",
+					"description": "50%",
+					"icon": "lamp_mid.png","icon2b":"Light01_050.png",
+					"http_url": "http://localhost/script/?exec=2B_milight.php&vars=[VAR1]&cmd=bri&bri=[RAW_VALUE]",					
+					"http_type": "GET",
+					"hidden": "0"
+				},
+				{
+					"value": "60",
+					"description": "60%",
+					"icon": "lamp_mid.png","icon2b":"Light01_060.png",
+					"http_url": "http://localhost/script/?exec=2B_milight.php&vars=[VAR1]&cmd=bri&bri=[RAW_VALUE]",					
+					"http_type": "GET",
+					"hidden": "0"
+				},
+				{
+					"value": "70",
+					"description": "70%",
+					"icon": "lamp_mid.png","icon2b":"Light01_070.png",
+					"http_url": "http://localhost/script/?exec=2B_milight.php&vars=[VAR1]&cmd=bri&bri=[RAW_VALUE]",					
+					"http_type": "GET",
+					"hidden": "0"
+				},
+				{
+					"value": "80",
+					"description": "80%",
+					"icon": "lamp_mid.png","icon2b":"Light01_080.png",
+					"http_url": "http://localhost/script/?exec=2B_milight.php&vars=[VAR1]&cmd=bri&bri=[RAW_VALUE]",					
+					"http_type": "GET",
+					"hidden": "0"
+				},
+				{
+					"value": "90",
+					"description": "90%",
+					"icon": "lamp_mid.png","icon2b":"Light01_090.png",
+					"http_url": "http://localhost/script/?exec=2B_milight.php&vars=[VAR1]&cmd=bri&bri=[RAW_VALUE]",					
+					"http_type": "GET",
+					"hidden": "0"
+				},
+				{
+					"value": "100",
+					"description": "Max",
+					"icon": "lamp_on.png","icon2b":"Light01_Max.png",
+					"http_url": "http://localhost/script/?exec=2B_milight.php&vars=[VAR1]&cmd=brimax",					
+					"http_type": "GET",
+					"hidden": "0"
+				}
+			]
+		},		
+		{	"device_id": "milampcol",		"create": "plugin.parameters.MIMODEL==2",		"parent_id": "milamprgb",
+			"module_id": "41",
+			"type": "http",
+			"name_fr": "plugin.name RGB - Couleurs",
+			"icon": "lamp_43.png","icon2b":"Light01_LRGB.png",
+			"utilisation_id": "82",
+			"parameters": {
+				"VAR1": "plugin.parameters.MIIP,plugin.parameters.MIGROUP,rgbw",
+				"VAR2": "plugin.devices.milamprgb",
+				"VAR3": "",
+				"value_type": "list",
+				"ignore_errors": 3,
+				"RAW_URL": "",
+				"RAW_XPATH": "",
+				"POLLING": "",
+				"CONVERT": "0"
+			},
+			"values": [
+				{
+					"value": "0,0,100",
+					"description": "Bleu",
+					"icon": "lamp_05.png","icon2b":"Light01_BLEU.png",
+					"http_url": "http://localhost/script/?exec=2B_milight.php&vars=[VAR1]&cmd=color&color=[RAW_VALUE]",	
+					"http_type": "GET",
+					"hidden": "0"
+				},
+				{
+					"value": "0,100,0",
+					"description": "Vert",
+					"icon": "lamp_04.png","icon2b":"Light01_VERT.png",
+					"http_url": "http://localhost/script/?exec=2B_milight.php&vars=[VAR1]&cmd=color&color=[RAW_VALUE]",	
+					"http_type": "GET",
+					"hidden": "0"
+				},
+				{
+					"value": "0,100,30",
+					"description": "Pomme",
+					"icon": "lamp_43.png","icon2b":"Light01_POMME.png",
+					"http_url": "http://localhost/script/?exec=2B_milight.php&vars=[VAR1]&cmd=color&color=[RAW_VALUE]",	
+					"http_type": "GET",
+					"hidden": "0"
+				},
+				{
+					"value": "0,50,100",
+					"description": "Cyan",
+					"icon": "lamp_08.png","icon2b":"Light01_CYAN.png",
+					"http_url": "http://localhost/script/?exec=2B_milight.php&vars=[VAR1]&cmd=color&color=[RAW_VALUE]",	
+					"http_type": "GET",
+					"hidden": "0"
+				}
+				,
+				{
+					"value": "40,0,100",
+					"description": "Violet",
+					"icon": "lamp_07.png","icon2b":"Light01_VIOLET.png",
+					"http_url": "http://localhost/script/?exec=2B_milight.php&vars=[VAR1]&cmd=color&color=[RAW_VALUE]",	
+					"http_type": "GET",
+					"hidden": "0"
+				}
+				,
+				{
+					"value": "100,0,0",
+					"description": "Rouge",
+					"icon": "lamp_03.png","icon2b":"Light01_ROUGE.png",
+					"http_url": "http://localhost/script/?exec=2B_milight.php&vars=[VAR1]&cmd=color&color=[RAW_VALUE]",	
+					"http_type": "GET",
+					"hidden": "0"
+				},
+				{
+					"value": "100,0,100",
+					"description": "Rose",
+					"icon": "lamp_38.png","icon2b":"Light01_ROSE.png",
+					"http_url": "http://localhost/script/?exec=2B_milight.php&vars=[VAR1]&cmd=color&color=[RAW_VALUE]",	
+					"http_type": "GET",
+					"hidden": "0"
+				}
+				,
+				{
+					"value": "100,100,0",
+					"description": "Jaune",
+					"icon": "lamp_06.png","icon2b":"Light01_JAUNE.png",
+					"http_url": "http://localhost/script/?exec=2B_milight.php&vars=[VAR1]&cmd=color&color=[RAW_VALUE]",	
+					"http_type": "GET",
+					"hidden": "0"
+				},
+				{
+					"value": "100,50,0",
+					"description": "Orange",
+					"icon": "lamp_46.png","icon2b":"Light01_ORANGE.png",
+					"http_url": "http://localhost/script/?exec=2B_milight.php&vars=[VAR1]&cmd=color&color=[RAW_VALUE]",	
+					"http_type": "GET",
+					"hidden": "0"
+				},
+				{
+					"value": "100,70,30",
+					"description": "Blanc très chaud",
+					"icon": "lamp_06.png","icon2b":"Light01_TempW4.png",
+					"http_url": "http://localhost/script/?exec=2B_milight.php&vars=[VAR1]&cmd=color&color=[RAW_VALUE]",	
+					"http_type": "GET",
+					"hidden": "0"
+				},
+				{
+					"value": "100,80,40",
+					"description": "Blanc chaud",
+					"icon": "lamp_on.png","icon2b":"Light01_TempW3.png",
+					"http_url": "http://localhost/script/?exec=2B_milight.php&vars=[VAR1]&cmd=color&color=[RAW_VALUE]",	
+					"http_type": "GET",
+					"hidden": "0"
+				},
+				{
+					"value": "100,80,50",
+					"description": "Blanc naturel",
+					"icon": "lamp_warm.png","icon2b":"Light01_TempW2.png",
+					"http_url": "http://localhost/script/?exec=2B_milight.php&vars=[VAR1]&cmd=color&color=[RAW_VALUE]",	
+					"http_type": "GET",
+					"hidden": "0"
+				},
+				{
+					"value": "100,90,60",
+					"description": "Blanc froid",
+					"icon": "lamp_02.png","icon2b":"Light01_TempW1.png",
+					"http_url": "http://localhost/script/?exec=2B_milight.php&vars=[VAR1]&cmd=color&color=[RAW_VALUE]",	
+					"http_type": "GET",
+					"hidden": "0"
+				},
+				{
+					"value": "100,90,70",
+					"description": "Blanc très froid",
+					"icon": "lamp_cold.png","icon2b":"Light01_TempW0.png",
+					"http_url": "http://localhost/script/?exec=2B_milight.php&vars=[VAR1]&cmd=color&color=[RAW_VALUE]",	
+					"http_type": "GET",
+					"hidden": "0"
+				},
+				{
+					"value": "100,100,100",
+					"description": "Blanc",
+					"icon": "lamp_02.png","icon2b":"Light01_BLANC.png",
+					"http_url": "http://localhost/script/?exec=2B_milight.php&vars=[VAR1]&cmd=towhite",	
+					"http_type": "GET",
+					"hidden": "0"
+				}
+			]
+		}
+	]
+}
