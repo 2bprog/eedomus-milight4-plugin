@@ -4,7 +4,7 @@
 	"icon": "milight.png",
 	"version": "0.0.1",
 	"creation_date": "2020-01-07",
-	"modification_date": "2020-01-07",
+	"modification_date": "2020-01-08",
 	"author": "Benjamin B.<br><a target='_blank' href='https://github.com/2bprog/eedomus-milight4-plugin'>Sources sur github <img src='/img/external.png'></a>",
 	"description_fr": "Création d'un périphérique pour piloter les ampoules Mi-light avec un bridge v4",
 	"description_en": "",
