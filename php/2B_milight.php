@@ -55,10 +55,11 @@
 // type  : [rgbw|white]
 
 // type=[rgbw]
-//		cmd=[on,off,tonight,towhite]
+//		cmd=[on|off|tonight|towhite|bri|brimax|brimin|discomode|discoslower|discofaster|color]
 //
 // type=[white]
-//		cmd=[on,off,tonight,towhite]
+//		cmd=[on|off|tonight|bri|brimax|brimin|briup|bridown|warminc|coolinc]
+
 
 // Lecture ip + port
 $vars = getArg('vars', false, ',0,');
@@ -113,10 +114,7 @@ $rgbwCodes = array(
         '2towhite' => array(0xc7, 0x00),
         '3towhite' => array(0xc9, 0x00),
         '4towhite' => array(0xcb, 0x00),
-		
 		'bri' => array(0x0e, 0x00), // utiliser le 2eme octet pour la valeur 
-		'brimax' => array(0x0e, 0x1b),
-		'brimin' => array(0x0e, 0x02), 
         'discomode' => array(0x4d, 0x00),
         'discoslower' => array(0x43, 0x00),
         'discofaster' => array(0x44, 0x00),
@@ -192,7 +190,11 @@ switch ($type)
 				    sdk_sendonoroff($host, $port, $group, 'on', $rgbwCodes);
                     sdk_milight_send($host, $port, array(0x40, $micolor));
                     break;
+				case 'brimax':
+				case 'brimin':
 				case 'bri':
+				    if ($cmd == 'brimin') $bri=0;
+					if ($cmd == 'brimax') $bri=100;
 				    if ($bri != '')
 				    {
 				        if ($bri <0) $bri = 0;
@@ -202,8 +204,6 @@ switch ($type)
                         sdk_milight_send($host, $port, array(0x4e, $bri));
 				    }
 				    break;
-				case 'brimax':
-				case 'brimin':
 				case 'discomode':
 				case 'discoslower':
 				case 'discofaster':
