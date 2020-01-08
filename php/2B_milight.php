@@ -2,8 +2,9 @@
 // -----------------------------------------------------------------------------
 // 2B_milight : interface de pilotage des ampoules milight v4
 // -----------------------------------------------------------------------------
-// base sur le https://github.com/yasharrashedi/LimitlessLED/blob/master/Milight.php
-
+// basé sur  Milight/LimitlessLED/EasyBulb PHP API 
+// https://github.com/yasharrashedi/LimitlessLED/blob/master/Milight.php
+// -----------------------------------------------------------------------------
 /*
  * Milight/LimitlessLED/EasyBulb PHP API
  * The MIT License (MIT)
@@ -28,10 +29,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
 */
+// -----------------------------------------------------------------------------
+//
+// ?vars=[VAR1]
+// &cmd=[on|off|tonight|towhite|bri|brimax|brimin|discomode|discoslower|discofaster|color]
+// [&bri=[0 à 100]
+// [&color=[0 à 100],[0 à 100],[0 à 100]]
+// [&set=(on)]
+// [&api=(onapi)]
 
 // -----------------------------------------------------------------------------
+//
 
-// TODO : remplacee host, group et type
+// vars : 
+//  VAR1 :  [ip:port,group,type]
+//   - ip:port  : ip + port du bridge v4
+//   - group    : Identifiant du groupe [0|1|2|3|4] 0 = tous
+//   - type     : [rgbw|white]
+//
+// type : 
 
 // &vars=[ip:port,group,type]
 // ip:port : 
@@ -55,8 +71,8 @@ $type = $varsar[2]; // rgbw ou white
 $cmd   = getArg("cmd",false, ''); // commande
 $bri = getArg("bri",false, '');  // luminosité
 $color = getArg("color",false, ''); // couleur au format eedomus
-$set= getArg("set",false, '0'); //on
-$api= getArg("api",false, '0'); //onapi
+$seton= getArg("set",false, '0'); //on
+$apion= getArg("api",false, '0'); //onapi
 
 // debug
 if ($hostp == '')
@@ -232,6 +248,12 @@ switch ($type)
 		
 	
 }	
+// fixe la lampe a on si elle etait a off
+if ($seton != 0)
+{
+	$onitem=getValue($apion);
+    if ($onitem["value"] == 0)	setValue($apion, -1, false, true);		
+}
 
 // $onoroff = 'on' ou 'off'
 function sdk_sendonoroff($host, $port, $group, $onoroff, Array $codes)
