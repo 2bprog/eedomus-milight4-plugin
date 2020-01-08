@@ -1,6 +1,6 @@
 ## v0.0.4-beta (08/01/2020)
 
-* Correction pooling 
+* Correction "fréquence d'actualisation" 
 
 ## v0.0.3-beta (08/01/2020)
 
