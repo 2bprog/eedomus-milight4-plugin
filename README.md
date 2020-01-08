@@ -1,4 +1,4 @@
-# eedomus-miliht-plugin (DEVELOPPEMENT EN COURS)
+# eedomus-milight4-plugin (DEVELOPPEMENT EN COURS)
 
 Plugin eedomus pour piloter les ampoules Mi-Light avec un bridge V4
 
