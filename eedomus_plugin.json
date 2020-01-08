@@ -2,7 +2,7 @@
 	"plugin_id": "bbmilight4",
 	"name_fr": "Milight v4",
 	"icon": "milight.png",
-	"version": "0.0.3",
+	"version": "0.0.4",
 	"creation_date": "2020-01-07",
 	"modification_date": "2020-01-08",
 	"author": "Benjamin B.<br><a target='_blank' href='https://github.com/2bprog/eedomus-milight4-plugin'>Sources sur github <img src='/img/external.png'></a>",
@@ -55,7 +55,7 @@
 				"ignore_errors": 3,
 				"RAW_URL": "",
 				"RAW_XPATH": "",
-				"POLLING": "",
+				"POLLING": "0",
 				"CONVERT": "0"
 			},
 			"values": [
@@ -131,7 +131,7 @@
 				"ignore_errors": 3,
 				"RAW_URL": "",
 				"RAW_XPATH": "",
-				"POLLING": "",
+				"POLLING": "0",
 				"CONVERT": "0"
 			},
 			"values": [
@@ -167,7 +167,7 @@
 				"ignore_errors": 3,
 				"RAW_URL": "",
 				"RAW_XPATH": "",
-				"POLLING": "",
+				"POLLING": "0",
 				"CONVERT": "0"
 			},
 			"values": [
@@ -299,7 +299,7 @@
 				"ignore_errors": 3,
 				"RAW_URL": "",
 				"RAW_XPATH": "",
-				"POLLING": "",
+				"POLLING": "0",
 				"CONVERT": "0"
 			},
 			"values": [
@@ -402,7 +402,7 @@
 				"ignore_errors": 3,
 				"RAW_URL": "",
 				"RAW_XPATH": "",
-				"POLLING": "",
+				"POLLING": "0",
 				"CONVERT": "0"
 			},	
 			"values": [
