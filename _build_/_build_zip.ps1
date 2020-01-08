@@ -36,3 +36,4 @@ CompressionLevel = "Optimal"
 DestinationPath = ".\$zip"
 }
 Compress-Archive @compress
+
