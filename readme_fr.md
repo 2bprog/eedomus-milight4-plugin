@@ -1,4 +1,5 @@
 Ce plugin eedomus permet de piloter les ampoules connectées à un bridge Mi-Light v4.
+
 Les sources sont disponibles [ici](https://github.com/2bprog/eedomus-milight4-plugin)
 
 ## Prérequis 
@@ -33,7 +34,7 @@ Cliquez sur "Configuration" / "Ajouter ou supprimer un périphérique" / "Store ee
 
 <table border="0"> 
   <tr>
-	<td ><img src="https://raw.githubusercontent.com/2bprog/eedomus-milight4-plugin/master/doc/rgb-on.jpg" alt="On, Off, Luminosité" ></td>
+	<td><img src="https://raw.githubusercontent.com/2bprog/eedomus-milight4-plugin/master/doc/rgb-on.jpg" alt="On, Off, Luminosité" ></td>
 	<td><img src="https://raw.githubusercontent.com/2bprog/eedomus-milight4-plugin/master/doc/rgb-col.jpg" alt="Couleurs" ></td>
 	<td><img src="https://raw.githubusercontent.com/2bprog/eedomus-milight4-plugin/master/doc/rgb-disco.jpg" alt="Effets" ></td>
   </tr>
