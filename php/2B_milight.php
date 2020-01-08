@@ -86,7 +86,7 @@ if ($hostp == '')
 $hostar = explode(":",$hostp); 
 $host = '';  // ip 
 if (count($hostar) > 0) $host=$hostar[0];
-$port = '80'; // port 8899
+$port = '8899'; // port 8899
 if (count($hostar) > 1) $port=$hostar[1];
 	
 
