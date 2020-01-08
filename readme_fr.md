@@ -19,16 +19,19 @@ Cliquez sur "Configuration" / "Ajouter ou supprimer un périphérique" / "Store ee
 
 ## Périphériques crées en fonction de votre sélection : 
 [1] Ampoule blanche
-<p style="vertical-align:top;>
+
+
 <img src="https://raw.githubusercontent.com/2bprog/eedomus-milight4-plugin/master/doc/ws-on.jpg" alt="On, Off, Luminosité" style="vertical-align:top;">&nbsp; 
 <img src="https://raw.githubusercontent.com/2bprog/eedomus-milight4-plugin/master/doc/ws-tm.jpg" alt="Température" style="vertical-align:top;">
-</p>
+
+
 [2] Ampoule RGB
-<p style="vertical-align:top;>
+
+
 <img src="https://raw.githubusercontent.com/2bprog/eedomus-milight4-plugin/master/doc/rgb-on.jpg" alt="On, Off, Luminosité" style="vertical-align:top;">&nbsp; 
 <img src="https://raw.githubusercontent.com/2bprog/eedomus-milight4-plugin/master/doc/rgb-col.jpg" alt="Couleurs" style="vertical-align:top;">
 <img src="https://raw.githubusercontent.com/2bprog/eedomus-milight4-plugin/master/doc/rgb-disco.jpg" alt="Effets" style="vertical-align:top;">
-  <p>
+
 
 ## Périphériques testés
 
