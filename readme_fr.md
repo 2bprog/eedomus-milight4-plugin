@@ -21,7 +21,7 @@ Cliquez sur "Configuration" / "Ajouter ou supprimer un périphérique" / "Store ee
 [1] Ampoule blanche
 
 <table border="0"> 
-  <tr style="vertical-align:top;">
+  <tr>
     <td><img src="https://raw.githubusercontent.com/2bprog/eedomus-milight4-plugin/master/doc/ws-on.jpg" alt="On, Off, Luminosité"></td>
     <td><img src="https://raw.githubusercontent.com/2bprog/eedomus-milight4-plugin/master/doc/ws-tm.jpg" alt="Température" ></td>
   </tr>
@@ -31,10 +31,10 @@ Cliquez sur "Configuration" / "Ajouter ou supprimer un périphérique" / "Store ee
 [2] Ampoule RGB
 
 <table border="0"> 
-  <tr style="vertical-align:top;">
-	<td style="vertical-align:top;><img src="https://raw.githubusercontent.com/2bprog/eedomus-milight4-plugin/master/doc/rgb-on.jpg" alt="On, Off, Luminosité" ></td>
-	<td style="vertical-align:top;><img src="https://raw.githubusercontent.com/2bprog/eedomus-milight4-plugin/master/doc/rgb-col.jpg" alt="Couleurs" ></td>
-	<td style="vertical-align:top;><img src="https://raw.githubusercontent.com/2bprog/eedomus-milight4-plugin/master/doc/rgb-disco.jpg" alt="Effets" ></td>
+  <tr>
+	<td ><img src="https://raw.githubusercontent.com/2bprog/eedomus-milight4-plugin/master/doc/rgb-on.jpg" alt="On, Off, Luminosité" ></td>
+	<td><img src="https://raw.githubusercontent.com/2bprog/eedomus-milight4-plugin/master/doc/rgb-col.jpg" alt="Couleurs" ></td>
+	<td><img src="https://raw.githubusercontent.com/2bprog/eedomus-milight4-plugin/master/doc/rgb-disco.jpg" alt="Effets" ></td>
   </tr>
 </table>
 
