@@ -2,7 +2,7 @@
 	"plugin_id": "bbmilight4",
 	"name_fr": "Milight v4",
 	"icon": "milight.png",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"creation_date": "2020-01-07",
 	"modification_date": "2020-01-08",
 	"author": "Benjamin B.<br><a target='_blank' href='https://github.com/2bprog/eedomus-milight4-plugin'>Sources sur github <img src='/img/external.png'></a>",
@@ -11,7 +11,7 @@
 	"description_es": "",
 	"description_it": "",
 	"description_de": "",
-	"forum_link": "",
+	"forum_link": "https://forum.eedomus.com/viewtopic.php?f=50&t=9216",
 	"parameters": [
 		{		
 			"parameter": "MIIP",
