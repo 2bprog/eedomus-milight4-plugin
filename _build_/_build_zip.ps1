@@ -1,5 +1,7 @@
-
 # script eedomus-milight4-plugin
+
+$zip = ".\release\milight4.zip"  
+
 
 $scriptpath = $MyInvocation.MyCommand.Path
 $dir = Split-Path $scriptpath
@@ -12,7 +14,6 @@ if (-Not (Test-Path ".\tmp\img"))     {  New-Item -Path ".\tmp" -Name "img" -Ite
 Remove-Item ".\tmp\*.*"
 Remove-Item ".\tmp\img\*.*"
 
-$zip = ".\release\milight4.zip"  
 if (Test-Path $zip) {  Remove-Item $zip }
 
 
