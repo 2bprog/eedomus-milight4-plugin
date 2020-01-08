@@ -193,7 +193,7 @@ switch ($type)
 				case 'brimax':
 				case 'brimin':
 				case 'bri':
-				    if ($cmd == 'brimin') $bri=0;
+				    if ($cmd == 'brimin') $bri=1;
 					if ($cmd == 'brimax') $bri=100;
 				    if ($bri != '')
 				    {
