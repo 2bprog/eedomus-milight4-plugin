@@ -169,9 +169,25 @@ $whiteCodes = array(
 $type = strtolower($type);
 $cmd = strtolower($cmd);
 $command = '';
+
+sdk_header("text/xml");
+echo "<milight4>\r\n";
+echo "<input>\r\n";
+echo "<host>".$host."</host>\r\n";
+echo "<port>".$port."</port>\r\n";
+echo "<type>".$type."</type>\r\n";
+echo "<cmd>".$cmd."</cmd>\r\n";
+echo "<bri>".$bri."</bri>\r\n";
+echo "<color>".$bri."</color>\r\n";
+echo "<seton>".$seton."</seton>\r\n";
+echo "<apion>".$apion."</apion>\r\n";
+echo "</input>\r\n";
+echo "<tmt>\r\n";
+
 switch ($type) 
 {
     case 'rgbw':
+		echo "<rgbw>\r\n";
 		switch ($cmd)
 		{
 				case 'on':
@@ -193,9 +209,9 @@ switch ($type)
 				case 'brimax':
 				case 'brimin':
 				case 'bri':
-				    if ($cmd == 'brimin') $bri=1;
+				    if ($cmd == 'brimin') $bri=0;
 					if ($cmd == 'brimax') $bri=100;
-				    if ($bri != '')
+				    if ($bri !== '')
 				    {
 				        if ($bri <0) $bri = 0;
 				        if ($bri > 100) $bri = 100;
@@ -212,11 +228,18 @@ switch ($type)
 					break;					
 				
         }
-		echo '*'.$command;
-		if ($command != '') sdk_milight_send($host, $port, $rgbwCodes[$command]);					
+		
+		if ($command != '') 		
+		{
+			echo "<command>".$command."<command>\r\n";
+			sdk_milight_send($host, $port, $rgbwCodes[$command]);
+		}
+
+		echo "</rgbw>\r\n";		
         break;
         
     case 'white':
+		echo "<white>\r\n";		
 		switch ($cmd)
 		{
 				case 'on':
@@ -243,7 +266,12 @@ switch ($type)
 				    break;
 					
         }
-		if ($command != '') sdk_milight_send($host, $port, $whiteCodes[$command]);					
+		if ($command != '') 
+		{
+			echo "<command>".$command."<command>\r\n";
+			sdk_milight_send($host, $port, $whiteCodes[$command]);					
+		}
+		echo "</white>\r\n";		
         break;
 		
 	
@@ -251,9 +279,18 @@ switch ($type)
 // fixe la lampe a on si elle etait a off
 if ($seton != 0)
 {
+	echo "<seton>\r\n";
 	$onitem=getValue($apion);
-    if ($onitem["value"] == 0)	setValue($apion, -1, false, true);		
+    if ($onitem["value"] == 0)	
+	{
+		echo "<setValue>-1</setValue>\r\n";
+		setValue($apion, -1, false, true);		
+	}
+	echo "</seton>\r\n";
 }
+
+echo "</tmt>\r\n";
+echo "</milight4>\r\n";
 
 // $onoroff = 'on' ou 'off'
 function sdk_sendonoroff($host, $port, $group, $onoroff, Array $codes)
@@ -273,21 +310,31 @@ function sdk_milight_send($host, $port, Array $command)
 {
 	$command_repeats = 10;
 	$command[] = 0x55; // last byte is always 0x55, will be appended to all commands
-	$message = vsprintf (str_repeat('%c', count($command)), $command);
-
+	
+	$trame = vsprintf (str_repeat('%c', count($command)), $command);		
+	echo "<send>";
+     
 	for($repetition=0; $repetition<$command_repeats; $repetition++) 
 	{
 		if ($socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP)) 
 		{
-    		socket_sendto($socket, $message, strlen($message), 0, $host, $port);	
+    		socket_sendto($socket, $trame, strlen($trame), 0, $host, $port);	
     		socket_close($socket);
-    	    usleep(10000); //wait 10ms * 10 before sending next command
+			if ($repetition == 0)
+			{
+				echo "<msg>".bin2hex($trame)."</msg>";
+				echo "<msglen>".strlen($trame)."</msglen>";			
+			}
+			usleep(10000); //wait 10ms * 10 before sending next command
 		}
 	}
+	echo "</send>\r\n";
 }
 
  function sdk_milight_rgbToHsl($r, $g, $b)
 {
+	echo "<rgbToHsl>";
+	echo "<rgb>".$r.",".$g.",".$b."</rgb>";
 	$r = $r / 255;
 	$g = $g / 255;
 	$b = $b / 255;
@@ -315,6 +362,8 @@ function sdk_milight_send($host, $port, Array $command)
 				break;
 		}
 	}
+	echo "<hsl>".$h.",".$s.",".$l."</hsl>";
+	echo "</rgbToHsl>\r\n";
 	return array($h, $s, $l);
 }
 
