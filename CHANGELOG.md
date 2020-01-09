@@ -1,3 +1,8 @@
+## v0.0.5-beta (08/01/2020)
+
+* Ajout xml avec les paramètres et les actions effectuées
+* Correction http_url pour la couleur
+
 ## v0.0.4-beta (08/01/2020)
 
 * Correction "fréquence d'actualisation" 
