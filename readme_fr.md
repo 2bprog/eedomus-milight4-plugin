@@ -2,6 +2,7 @@ Ce plugin eedomus permet de piloter les ampoules connectées à un bridge Mi-Light
 
 ## Prérequis 
 
+Une box eedomus+ 
 Un bridge Mi-Light v4 installé et configuré.
 
 ## Installation
@@ -23,7 +24,7 @@ Cliquez sur "Configuration" / "Ajouter ou supprimer un périphérique" / "Store ee
 
 [2] Ampoule RGBW
 
-![Ampoule RGBW](https://raw.githubusercontent.com/2bprog/eedomus-milight4-plugin/master/doc/rgb.jpg)
+![Ampoule RGBW](https://raw.githubusercontent.com/2bprog/eedomus-milight4-plugin/master/doc/rgb-0.0.6.jpg)
 
 ## Périphériques testés
 
