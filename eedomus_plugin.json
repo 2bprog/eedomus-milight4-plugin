@@ -136,7 +136,7 @@
 			},
 			"values": [
 				{
-					"value": "coolinc",
+					"value": "tempdown",
 					"description": "Plus froid",
 					"icon": "lamp_cold.png","icon2b":"Light01_Temppf.png",
 					"http_url": "http://localhost/script/?exec=2B_milight.php&vars=[VAR1]&cmd=[RAW_VALUE]&set=1&api=[VAR2]",
@@ -144,7 +144,7 @@
 					"hidden": "0"
 				},
 				{
-					"value": "warminc",
+					"value": "tempup",
 					"description": "Plus chaud",
 					"icon": "lamp_warm.png","icon2b":"Light01_Temppc.png",
 					"http_url": "http://localhost/script/?exec=2B_milight.php&vars=[VAR1]&cmd=[RAW_VALUE]&set=1&api=[VAR2]",
