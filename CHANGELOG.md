@@ -1,3 +1,16 @@
+## v0.0.6-beta (13/01/2020)
+
+* Modification de certaines images
+* Ajout des parametres fastest et slowest
+* Modification des paramètres color et bri
+* Remplacement du paramètre discomode par mode
+* Remplacement du paramètre discoslower par slower
+* Remplacement du paramètre discofaster par faster
+* Remplacement du paramètre coolinc par tempdown
+* Remplacement du paramètre warminc par tempup
+* suppresion des "retry" lors de l'envoi des paquets UDP 
+* ajout message d'erreur dans le retour xml
+
 ## v0.0.5-beta (08/01/2020)
 
 * Ajout xml avec les paramètres et les actions effectuées
