@@ -167,7 +167,7 @@ $whiteCodes = array(
         'tempup' => array(0x3e, 0x00),        
 		);
 
-
+/*
 // Ampoules et contoleur RGB (ancienne génération) => pas de zone
 $rgbCodes = array(
 		'off'  => array(0x21, 0x00),
@@ -180,7 +180,7 @@ $rgbCodes = array(
 		'modedown' => array(0x28, 0x00),
 		'modeup' => array(0x27, 0x00),
 		);
-		
+*/	
 		
 echo "<input>\r\n";
 echo "<host>".$host."</host>\r\n";
