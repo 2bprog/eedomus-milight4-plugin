@@ -2,8 +2,8 @@
 // -----------------------------------------------------------------------------
 // 2B_milight : interface de pilotage des ampoules milight v4
 // -----------------------------------------------------------------------------
-// basé sur  Milight/LimitlessLED/EasyBulb PHP API 
-// https://github.com/yasharrashedi/LimitlessLED/blob/master/Milight.php
+// basé sur  
+// 	- https://github.com/yasharrashedi/LimitlessLED/blob/master/Milight.php
 // -----------------------------------------------------------------------------
 /*
  * Milight/LimitlessLED/EasyBulb PHP API
@@ -31,65 +31,83 @@
 */
 // -----------------------------------------------------------------------------
 //
-// ?vars=[VAR1]
-// &cmd=[on|off|tonight|towhite|bri|brimax|brimin|discomode|discoslower|discofaster|color]
-// [&bri=[0 à 100]
-// [&color=[0 à 100],[0 à 100],[0 à 100]]
-// [&set=(on)]
-// [&api=(onapi)]
-
+// &vars=[VAR1]
+//   VAR1 :  [ip:port,group,type]
+//   		- ip:port  : ip + port envoi + port reception du bridge v4
+//   		- group    : Identifiant du groupe [0|1|2|3|4] 0 = tous
+//   		- type 	   : rgb | rgbw
+// &cmd=
+//  on
+//	off
+//	bri : [0 à 100]
+//	bridown
+//	briup
+//  brimax
+//  brimin
+//	towhite
+//	tonight
+//	color : [0 à 100],[0 à 100],[0 à 100]]
+//	mode 
+// 	slowest
+// 	slower
+// 	faster
+//  fastest
+//  tempdown
+//  tempup
+// [&set=(on "0 à 1")]
+// [&api=(onapi "Code API")]
+//
 // -----------------------------------------------------------------------------
-//
+// Obsolete : [&cmd=[discomode, discoslower,discofaster, warminc, coolinc]
+//            [&bri= | &color= ] 
+// -----------------------------------------------------------------------------
 
-// vars : 
-//  VAR1 :  [ip:port,group,type]
-//   - ip:port  : ip + port du bridge v4
-//   - group    : Identifiant du groupe [0|1|2|3|4] 0 = tous
-//   - type     : [rgbw|white]
-//
-// type : 
 
-// &vars=[ip:port,group,type]
-// ip:port : 
-// group : [0|1|2|3|4]
-// type  : [rgbw|white]
 
-// type=[rgbw]
-//		cmd=[on|off|tonight|towhite|bri|brimax|brimin|discomode|discoslower|discofaster|color]
-//
-// type=[white]
-//		cmd=[on|off|tonight|bri|brimax|brimin|briup|bridown|warminc|coolinc]
-
+sdk_header("text/xml");
+echo "<milight4>\r\n";
 
 // Lecture ip + port
 $vars = getArg('vars', false, ',0,');
 $varsar = explode(',',$vars);
-
 $hostp = $varsar[0];
-$group = $varsar[1]; // 0 - all ou 1,2,3,4
-$type = $varsar[2]; // rgbw ou white
+$hostar = explode(":",$hostp); 
 
-$cmd   = getArg("cmd",false, ''); // commande
-$bri = getArg("bri",false, '');  // luminosité
-$color = getArg("color",false, ''); // couleur au format eedomus
+$host = '';  // ip 
+$port = '8899'; // port 8899
+
+if (count($hostar) > 0) $host=$hostar[0];
+if (count($hostar) > 1) $port=$hostar[1];
+
+$group = $varsar[1]; // 0 - all ou 1,2,3,4
+$type = strtolower($varsar[2]); // rgbw ou white
+$cmdar = strtolower(getArg('cmd',false, '')); // commande
+
+$cmdar = explode(':', $cmdar);
+$cmd = '';
+$cmdparam = '';
+if (count($cmdar) > 0) $cmd=$cmdar[0];
+if (count($cmdar) > 1) $cmdparam=$cmdar[1];
+
+if ($cmd == 'discomode') $cmd = 'mode';
+if ($cmd == 'discoslower') $cmd = 'slower';
+if ($cmd == 'discofaster') $cmd = 'faster';
+if ($cmd == 'coolinc') $cmd = 'tempdown';
+if ($cmd == 'warminc') $cmd = 'tempup';
+
+if ($cmd == 'bri' && $cmdparam !== '')			$bri = $cmdparam;  		else $bri = getArg('bri',false, -1);
+if ($cmd == 'color' && $cmdparam !== '') 		$color = $cmdparam;  	else $color = getArg('color',false, '');
+
 $seton= getArg("set",false, '0'); //on
 $apion= getArg("api",false, '0'); //onapi
 
-// debug
-if ($hostp == '')
-{
-       $hostp = '10.66.253.200:8899';
-       $type = 'rgbw';
-       $group = '1';
-       $cmd="tonight";
-}
+$perreur = '';
+if ($host =='') $perreur .= "[host vide] ";	// host vide
+if ($group < 0 || $group > 4) $perreur .= "[groupe ($group) incorrect] ";		
+if ( $cmd=='bri' && (($bri < 0) || ($bri > 100)))	$perreur .= "[bri ($bri) incorrect] ";	
+if ( $cmd=='color' && (count(explode(',', $color)) != 3))	$perreur .= "[color ($color) incorrect] ";	
 
-$hostar = explode(":",$hostp); 
-$host = '';  // ip 
-if (count($hostar) > 0) $host=$hostar[0];
-$port = '8899'; // port 8899
-if (count($hostar) > 1) $port=$hostar[1];
-	
+ if (!(($type == 'rgbw') || ($type == 'white'))) $perreur .= "[type ($type) incorrect] ";	// type incorrect
 
 $rgbwCodes = array(
         //RGBW Bulb commands
@@ -114,28 +132,11 @@ $rgbwCodes = array(
         '2towhite' => array(0xc7, 0x00),
         '3towhite' => array(0xc9, 0x00),
         '4towhite' => array(0xcb, 0x00),
-		'bri' => array(0x0e, 0x00), // utiliser le 2eme octet pour la valeur 
-        'discomode' => array(0x4d, 0x00),
-        'discoslower' => array(0x43, 0x00),
-        'discofaster' => array(0x44, 0x00),
+		'bri' => array(0x4e, 0x00), // utiliser le 2eme octet pour la valeur  // voir 0x4e !
+        'mode' => array(0x4d, 0x00),
+        'slower' => array(0x43, 0x00),
+        'faster' => array(0x44, 0x00),
         'color' => array(0x40, 0x00) // utiliser le 2eme octet pour la valeur 
-/*      'colortoviolet' => array(0x40, 0x00),
-        'colortoroyalblue' => array(0x40, 0x10),
-        'colortobabyblue' => array(0x40, 0x20),
-        'colortoaqua' => array(0x40, 0x30),
-        'colortoroyalmint' => array(0x40, 0x40),
-        'colortoseafoamgreen' => array(0x40, 0x50),
-        'colortogreen' => array(0x40, 0x60),
-        'colortolimegreen' => array(0x40, 0x70),
-        'colortoyellow' => array(0x40, 0x80),
-        'colortoyelloworange' => array(0x40, 0x90),
-        'colortoorange' => array(0x40, 0xa0),
-        'colortored' => array(0x40, 0xb0),
-        'colortopink' => array(0x40, 0xc0),
-        'colortofusia' => array(0x40, 0xd0),
-        'colortolilac' => array(0x40, 0xe0),
-        'colortolavendar' => array(0x40, 0xf0),	
-        */
 		);
 		
 $whiteCodes = array(
@@ -162,122 +163,149 @@ $whiteCodes = array(
         '4brimax' => array(0xb2, 0x00),
         'briup' => array(0x3c, 0x00),
         'bridown' => array(0x34, 0x00),	       
-        'warminc' => array(0x3e, 0x00),
-        'coolinc' => array(0x3f, 0x00)
+		'tempdown' => array(0x3f, 0x00),
+        'tempup' => array(0x3e, 0x00),        
+		);
+
+
+// Ampoules et contoleur RGB (ancienne génération) => pas de zone
+$rgbCodes = array(
+		'off'  => array(0x21, 0x00),
+		'on'  => array(0x22, 0x00),
+		'color'  => array(0x20, 0x00),		
+		'bridown'  => array(0x24, 0x00),
+		'briup'  => array(0x23, 0x00),
+		'slower'  => array(0x26, 0x00),
+		'faster'  => array(0x25, 0x00),		
+		'modedown' => array(0x28, 0x00),
+		'modeup' => array(0x27, 0x00),
 		);
 		
-$type = strtolower($type);
-$cmd = strtolower($cmd);
-$command = '';
-
-sdk_header("text/xml");
-echo "<milight4>\r\n";
+		
 echo "<input>\r\n";
 echo "<host>".$host."</host>\r\n";
 echo "<port>".$port."</port>\r\n";
+echo "<group>".$group."</group>\r\n";
 echo "<type>".$type."</type>\r\n";
 echo "<cmd>".$cmd."</cmd>\r\n";
 echo "<bri>".$bri."</bri>\r\n";
-echo "<color>".$bri."</color>\r\n";
+echo "<color>".$color."</color>\r\n";
 echo "<seton>".$seton."</seton>\r\n";
 echo "<apion>".$apion."</apion>\r\n";
 echo "</input>\r\n";
+
 echo "<tmt>\r\n";
 
-switch ($type) 
-{
-    case 'rgbw':
-		echo "<rgbw>\r\n";
-		switch ($cmd)
-		{
-				case 'on':
-				case 'off':				
-				case 'towhite':
-					$command = $group.$cmd;	
-					break;				
-				case 'tonight':
-					sdk_sendonoroff($host, $port, $group, 'off', $rgbwCodes);
-					$command = $group.$cmd;					
-					break;
-				case 'color':
-				    $rgb = explode(',', $color);
-				    $hsl = sdk_milight_rgbToHsl(floor($rgb[0] * 2.54), floor($rgb[1] * 2.54), floor($rgb[2] * 2.54));
-				    $micolor = sdk_milight_hslToMilightColor($hsl);
-				    sdk_sendonoroff($host, $port, $group, 'on', $rgbwCodes);
-                    sdk_milight_send($host, $port, array(0x40, $micolor));
-                    break;
-				case 'brimax':
-				case 'brimin':
-				case 'bri':
-				    if ($cmd == 'brimin') $bri=0;
-					if ($cmd == 'brimax') $bri=100;
-				    if ($bri !== '')
-				    {
-				        if ($bri <0) $bri = 0;
-				        if ($bri > 100) $bri = 100;
-				        $bri = round(2+(($bri/100)*25));
-                        sdk_sendonoroff($host, $port, $group, 'on', $rgbwCodes);
-                        sdk_milight_send($host, $port, array(0x4e, $bri));
-				    }
-				    break;
-				case 'discomode':
-				case 'discoslower':
-				case 'discofaster':
-					sdk_sendonoroff($host, $port, $group, 'on', $rgbwCodes);
-					$command = $cmd;		
-					break;					
-				
-        }
-		
-		if ($command != '') 		
-		{
-			echo "<command>".$command."<command>\r\n";
-			sdk_milight_send($host, $port, $rgbwCodes[$command]);
-		}
+if ($perreur == '')
+{	
 
-		echo "</rgbw>\r\n";		
-        break;
-        
-    case 'white':
-		echo "<white>\r\n";		
-		switch ($cmd)
-		{
-				case 'on':
-				case 'off':				
-				case 'brimax':
-					$command = $group.$cmd;
-					break;	
-				case 'tonight':
-					sdk_sendonoroff($host, $port, $group, 'off', $whiteCodes);
-					$command = $group.$cmd;
-					break;	
-				case 'briup':
-				case 'bridown':
-				case 'warminc':
-				case 'coolinc':
-				    sdk_sendonoroff($host, $port, $group, 'on', $whiteCodes);
-					$command = $cmd;
-					break;	
-				case 'brimin':
-				    sdk_sendonoroff($host, $port, $group, 'on', $whiteCodes);
-				     for ($i = 0; $i < 10; $i++) {
-				         sdk_milight_send($host, $port, $whiteCodes['bridown']);
-                       }
-				    break;
+	switch ($type) 
+	{
+		case 'rgbw':
+			echo "<rgbw>\r\n";
+			switch ($cmd)
+			{
+					case 'on':
+					case 'off':				
+					case 'towhite':
+						sdk_milight_send($host, $port, $rgbwCodes[$group.$cmd]);					
+						break;				
+					case 'tonight':
+						sdk_sendonoroff($host, $port, $group, 'off', $rgbwCodes);
+						sdk_milight_send($host, $port, $rgbwCodes[$group.$cmd]);					
+						break;
+					case 'color':
+						$rgb = explode(',', $color);
+						$hsl = sdk_milight_rgbToHsl(floor($rgb[0] * 2.54), floor($rgb[1] * 2.54), floor($rgb[2] * 2.54));
+						$micolor = sdk_milight_hslToMilightColor($hsl);
+						sdk_sendonoroff($host, $port, $group, 'on', $rgbwCodes);
+						sdk_milight_send($host, $port, array(0x40, $micolor));
+						break;
+					case 'brimax':
+					case 'brimin':
+					case 'bri':
+						if ($cmd == 'brimin') $bri=0;
+						if ($cmd == 'brimax') $bri=100;
+						if ($bri !== '')
+						{
+							if ($bri <0) $bri = 0;
+							if ($bri > 100) $bri = 100;
+							$bri = round(2+(($bri/100)*25));
+							sdk_sendonoroff($host, $port, $group, 'on', $rgbwCodes);
+							$briCodes = $rgbwCodes['bri'];
+							$briCodes[1] = $bri;
+							sdk_milight_send($host, $port, $briCodes);
+						}
+						break;
+					case 'mode':
+						sdk_sendonoroff($host, $port, $group, 'on', $rgbwCodes);	
+						sdk_milight_send($host, $port, $rgbwCodes[$cmd]);					
+						break;
+					case 'slowest':				
+					case 'slower':
+					case 'faster':
+					case 'fastest':
+						sdk_sendonoroff($host, $port, $group, 'on', $rgbwCodes);
+						$imax = 1;
+						$cmdtmp = $cmd;
+						if ($cmd == 'slowest' || $cmd == 'fastest')  $imax = 8;
+						if ($cmd == 'slowest')  $cmdtmp = 'slower';
+						if ($cmd == 'fastest')  $cmdtmp = 'faster';
+						for ($i=0 ; $i < $imax ; $i++)
+						{
+							sdk_milight_send($host, $port, $rgbwCodes[$cmdtmp]);
+							sdk_sleepms(50);						
+						}
+						
+						break;		
+					default:
+						$perreur .= "[commande $cmd inconnu] ";	
 					
-        }
-		if ($command != '') 
-		{
-			echo "<command>".$command."<command>\r\n";
-			sdk_milight_send($host, $port, $whiteCodes[$command]);					
-		}
-		echo "</white>\r\n";		
-        break;
-		
-	
-}	
+			}		
+			echo "</rgbw>\r\n";		
+			break;
+			
+		case 'white':
+			echo "<white>\r\n";		
+			switch ($cmd)
+			{
+					case 'on':
+					case 'off':				
+					case 'brimax':					
+						sdk_milight_send($host, $port, $whiteCodes[$group.$cmd]);					
+						break;	
+					case 'tonight':
+						sdk_sendonoroff($host, $port, $group, 'off', $whiteCodes);
+						sdk_milight_send($host, $port, $whiteCodes[$group.$cmd]);					
+						break;	
+					case 'bridown':
+					case 'briup':				
+					case 'tempdown':
+					case 'tempup':
+						sdk_sendonoroff($host, $port, $group, 'on', $whiteCodes);
+						sdk_milight_send($host, $port, $whiteCodes[$cmd]);					
+						break;	
+					case 'brimin':
+						sdk_sendonoroff($host, $port, $group, 'on', $whiteCodes);
+						 for ($i = 0; $i < 10; $i++) {						 
+							 sdk_milight_send($host, $port, $whiteCodes['bridown']);
+							 sdk_sleepms(50);
+						   }
+						break;
+					default:
+						$perreur .= "[commande $cmd inconnu] ";						
+			}
+			echo "</white>\r\n";		
+			break;			
+	}	
+}
+
 // fixe la lampe a on si elle etait a off
-if ($seton != 0)
+if ($perreur != '') 
+{
+	echo "<error>$perreur</error>\r\n";	
+}
+else if ($seton != 0)
 {
 	echo "<seton>\r\n";
 	$onitem=getValue($apion);
@@ -308,7 +336,7 @@ function sdk_sendonoroff($host, $port, $group, $onoroff, Array $codes)
 
 function sdk_milight_send($host, $port, Array $command)
 {
-	$command_repeats = 10;
+	$command_repeats = 1;
 	$command[] = 0x55; // last byte is always 0x55, will be appended to all commands
 	
 	$trame = vsprintf (str_repeat('%c', count($command)), $command);		
@@ -373,32 +401,15 @@ function sdk_milight_hslToMilightColor($hsl)
         return $color + 0xfa;
  }
 
-
-/*
- public function sdk_milight_rgbHexToRgb($hexColor)
+function sdk_sleepms($ms)
 {
-	$hexColor = ltrim($hexColor, '#');
-	$hexColorLenghth = strlen($hexColor);
-	if ($hexColorLenghth != 8 && $hexColorLenghth != 6) {
-		throw new \Exception('Color hex code must match 8 or 6 characters');
+	$ms = abs($ms);
+	if( $ms > 5000) $ms = 5000;
+	for ($i = 0; $i < $ms ; $i++)
+	{
+		usleep(1000); //wait 1ms 
 	}
-	if ($hexColorLenghth == 8) {
-		$r = hexdec(substr($hexColor, 2, 2));
-		$g = hexdec(substr($hexColor, 4, 2));
-		$b = hexdec(substr($hexColor, 6, 2));
-		if (($r == 0 && $g == 0 && $b == 0) || ($r == 255 && $g == 255 && $b == 255)) {
-			throw new \Exception('Color cannot be black or white');
-		}
-		return array($r, $g, $b);
-	}
-	$r = hexdec(substr($hexColor, 0, 2));
-	$g = hexdec(substr($hexColor, 2, 2));
-	$b = hexdec(substr($hexColor, 4, 2));
-	if (($r == 0 && $g == 0 && $b == 0) || ($r == 255 && $g == 255 && $b == 255)) {
-		throw new \Exception('Color cannot be black or white');
-	}
-	return array($r, $g, $b);
 }
-*/
+
 
 ?>
