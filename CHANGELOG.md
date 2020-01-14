@@ -8,8 +8,8 @@
 * Remplacement du paramètre discofaster par faster
 * Remplacement du paramètre coolinc par tempdown
 * Remplacement du paramètre warminc par tempup
-* suppresion des "retry" lors de l'envoi des paquets UDP 
-* ajout message d'erreur dans le retour xml
+* Suppresion des "retry" lors de l'envoi des paquets UDP 
+* Ajout message d'erreur dans le retour xml
 
 ## v0.0.5-beta (08/01/2020)
 
@@ -24,7 +24,7 @@
 
 * Ajout du lien vers le forum eedomus
 * Correction brimin et brimax pour les ampoules RGBW
-* Modification du fichier readme_fr.m
+* Modification du fichier readme_fr.md
 * Ajout du fichier CHANGELOG.MD
  
 ## v0.0.2-beta (08/01/2020)
