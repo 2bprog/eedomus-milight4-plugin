@@ -1,9 +1,9 @@
-Ce plugin eedomus permet de piloter les ampoules connectées à un bridge Mi-Light v4.
+Ce plugin eedomus permet de piloter les ampoules connectées à un bridge Mi-Light v4 ou v5.
 
 ## Prérequis 
 
 * Une box eedomus+ 
-* Un bridge Mi-Light v4 installé et configuré.
+* Un bridge Mi-Light v4 ou v5 installé et configuré.
 
 Exemple de controleur Mi-Light v4 :
 
@@ -15,7 +15,7 @@ Exemple de controleur Mi-Light v4 :
 
 ## Champs a configurer : 
 
-![Configuration Mi-Light v4](https://raw.githubusercontent.com/2bprog/eedomus-milight4-plugin/master/doc/milight4.jpg)
+![Configuration Mi-Light v4 ou v5](https://raw.githubusercontent.com/2bprog/eedomus-milight4-plugin/master/doc/milight4.jpg)
 
 * IP + Port : Adresse IP et port (sous la forme x.x.x.x:yyyy) de votre bridge Mi-Light v4, par défaut le port est 8899 
 * Type d'ampoule : Ampoule Blanche ou Ampoule RGBW
