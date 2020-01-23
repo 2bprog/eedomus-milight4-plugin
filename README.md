@@ -5,6 +5,10 @@ Ce plugin eedomus permet de piloter les ampoules connectées à un bridge Mi-Light
 * Une box eedomus+ 
 * Un bridge Mi-Light v4 installé et configuré.
 
+Exemple de controleur Mi-Light v4 :
+
+![Exemple Mi-Light v4](https://raw.githubusercontent.com/2bprog/eedomus-milight4-plugin/master/doc/milightv4.png)
+
 ## Installation
 
 * Cliquez sur "Configuration" / "Ajouter ou supprimer un périphérique" / "Store eedomus" / "Milight v4" / "Créer"
