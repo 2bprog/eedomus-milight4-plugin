@@ -17,7 +17,7 @@ Exemple de controleur Mi-Light v4 :
 
 ![Configuration Mi-Light v4 ou v5](https://raw.githubusercontent.com/2bprog/eedomus-milight4-plugin/master/doc/milight4.jpg)
 
-* IP + Port : Adresse IP et port (sous la forme x.x.x.x:yyyy) de votre bridge Mi-Light v4, par défaut le port est 8899 
+* IP + Port : Adresse IP et port (sous la forme x.x.x.x:yyyy) de votre bridge Mi-Light v4 ou v5, par défaut le port est 8899 
 * Type d'ampoule : Ampoule Blanche ou Ampoule RGBW
 * Groupe : Le groupe sur lequel est connecté l'ampoule, vous pouvez egalement sélectionner tous les groupes.
 
